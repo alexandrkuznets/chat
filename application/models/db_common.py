@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, async_sessi
 
 from core.config import settings
 
+
 class DatabaseCommon:
     def __init__(self,
                  url: str,
@@ -30,6 +31,7 @@ class DatabaseCommon:
     async def session_getter(self):
         async with self.session_factory() as session:
             yield session
+
 
 db_common = DatabaseCommon(
     url=str(settings.db.url),
