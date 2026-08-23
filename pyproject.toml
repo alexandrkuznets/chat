@@ -5,3 +5,5 @@ package-mode = false
 python = "^3.12"
 fastapi = {extras = ["standard"], version = "^0.141.1"}
 uvicorn = {extras = ["standard"], version = "^0.52.4"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.52"}
+asyncpg = "^0.31.0"
