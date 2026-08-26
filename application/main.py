@@ -1,9 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from application.api import router as chat_router
-from application.core.config import settings
-from application.models.db_common import db_common
+from api import router as chat_router
+from core.config import settings
+from models.db_common import db_common
 
 
 async def lifespan(app: FastAPI):
