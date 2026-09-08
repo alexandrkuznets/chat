@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, PostgresDsn, SecretStr
 
 
 class RunAppConfig(BaseModel):
@@ -19,6 +19,12 @@ class DatabaseConfig(BaseModel):
     max_overflow: int = 10
 
 
+class AuthConfig(BaseModel):
+    secret_key: SecretStr
+    algorithm: str
+    access_token_expire_minutes = 30
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -30,7 +36,7 @@ class Settings(BaseSettings):
     run: RunAppConfig = RunAppConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
-
+    auth: AuthConfig = AuthConfig()
 
 
 settings = Settings()
