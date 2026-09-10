@@ -22,7 +22,7 @@ class DatabaseConfig(BaseModel):
 class AuthConfig(BaseModel):
     secret_key: SecretStr
     algorithm: str
-    access_token_expire_minutes = 30
+    access_token_expire_minutes: int = 30
 
 
 class Settings(BaseSettings):
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     run: RunAppConfig = RunAppConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
-    auth: AuthConfig = AuthConfig()
+    auth: AuthConfig
 
 
 settings = Settings()
