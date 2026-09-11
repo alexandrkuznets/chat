@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from dependiences.auth import get_current_user
 from models.db_common import db_common
 from models.user import User
-from schemas.message import MessageResponse
-from services.messages import get_messages_from_db
+from schemas.message import MessageResponse, MessageCreate
+from services.messages import get_messages_from_db, save_message_in_db
 
 router = APIRouter(prefix="/conversation", tags=["messages"])
 
@@ -20,4 +20,14 @@ async def get_messages(
         session: AsyncSession = Depends(db_common.session_getter)
 ) -> List[MessageResponse]:
     result = await get_messages_from_db(user_id, limit, session)
+    return result
+
+
+@router.post("/{user_id}/messages/")
+async def send_messages(
+        user_id: int,
+        current_user: User = Depends(get_current_user),
+        session: AsyncSession = Depends(db_common.session_getter)
+) -> MessageCreate:
+    result = await save_message_in_db(receiver=user_id, sender=current_user.id, session=session)
     return result
