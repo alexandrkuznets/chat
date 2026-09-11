@@ -11,12 +11,13 @@ from dependiences.auth import get_current_active_user
 from models.user import User
 from models.db_common import db_common
 from schemas.token import Token
-from schemas.user import UserResponse
+from schemas.user import UserResponse, UserCreate
+from services.user import create_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/token")
+@router.post("/login/")
 async def login_for_access_token(
         form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
         session: AsyncSession = Depends(db_common.session_getter)
@@ -30,12 +31,21 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"}
         )
-    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    access_token_expires = timedelta(minutes=settings.auth.access_token_expire_minutes)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=access_token_expires
     )
     # logger.info(f"Создан JWT токен: пользователь {form_data.username}")
     return Token(access_token=access_token, token_type="bearer")
+
+
+@router.post("/register/")
+async def register(
+        user: UserCreate,
+        session: AsyncSession = Depends(db_common.session_getter)
+) -> UserResponse:
+    result = await create_user(user, session)
+    return result
 
 
 @router.get("/users/me/")

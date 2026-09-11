@@ -12,7 +12,7 @@ from models.user import User
 from models.db_common import db_common
 from core.config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 async def get_user(username: str, session: AsyncSession):
