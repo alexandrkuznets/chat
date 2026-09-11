@@ -12,22 +12,22 @@ from services.messages import get_messages_from_db, save_message_in_db
 router = APIRouter(prefix="/conversation", tags=["messages"])
 
 
-@router.get("/{user_id}/messages/")
+@router.get("/messages/")
 async def get_messages(
-        user_id: int,
         limit: int = 50,
         current_user: User = Depends(get_current_user),
         session: AsyncSession = Depends(db_common.session_getter)
 ) -> List[MessageResponse]:
-    result = await get_messages_from_db(user_id, limit, session)
+    result = await get_messages_from_db(current_user.id, limit, session)
     return result
 
 
 @router.post("/{user_id}/messages/")
 async def send_messages(
         user_id: int,
+        message: str,
         current_user: User = Depends(get_current_user),
         session: AsyncSession = Depends(db_common.session_getter)
 ) -> MessageCreate:
-    result = await save_message_in_db(receiver=user_id, sender=current_user.id, session=session)
+    result = await save_message_in_db(receiver=user_id, sender=current_user.id, message=message, session=session)
     return result

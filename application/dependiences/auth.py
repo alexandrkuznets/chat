@@ -12,7 +12,7 @@ from models.user import User
 from models.db_common import db_common
 from core.config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login/")
 
 
 async def get_user(username: str, session: AsyncSession):
@@ -29,7 +29,7 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.secret_key.get_secret_value(), algorithms=[settings.algorithm])
+        payload = jwt.decode(token, settings.auth.secret_key.get_secret_value(), algorithms=[settings.auth.algorithm])
         username = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -45,6 +45,6 @@ async def get_current_active_user(
         current_user: Annotated[User, Depends(get_current_user)],
         session: AsyncSession = Depends(db_common.session_getter)
 ):
-    if not current_user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+    # if not current_user.is_active:
+    #     raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
