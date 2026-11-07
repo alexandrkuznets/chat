@@ -19,8 +19,8 @@ def verify_password(password: str, hashed_password: str) -> bool:
     return password_hash.verify(password, hashed_password)
 
 
-async def authenticate_user(session: AsyncSession, email: str, password: str):
-    user = await get_user(email, session)
+async def authenticate_user(session: AsyncSession, username: str, password: str):
+    user = await get_user(username, session)
     if not user:
         verify_password(password, DUMMY_HASH)
         return False

@@ -39,7 +39,7 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/register/")
+@router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def register(
         user: UserCreate,
         session: AsyncSession = Depends(db_common.session_getter)
