@@ -1,15 +1,19 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     env_file: application/.env
     restart: unless-stopped
+    volumes:
+      - ./application:/application/application
     ports:
       - "3535:3535"
     depends_on:
       postgres:
         condition: service_healthy
   postgres:
-    image: postgres
+    image: postgres:17.6
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}

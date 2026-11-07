@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /
+WORKDIR /application
 
 RUN pip install poetry
 
@@ -11,5 +11,5 @@ RUN poetry config virtualenvs.create false \
 
 COPY . .
 
-CMD ["uvicorn", "application.main:app", "--host", "0.0.0.0", "--port", "3535"]
+CMD ["uvicorn", "application.main:app", "--host", "0.0.0.0", "--port", "3535", "--reload"]
 
