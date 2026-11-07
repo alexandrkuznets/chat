@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependiences.auth import get_current_user
-from models.db_common import db_common
-from models.user import User
-from schemas.message import MessageResponse, MessageCreate
-from services.messages import get_messages_from_db, save_message_in_db
+from application.dependiences.auth import get_current_user
+from application.models.db_common import db_common
+from application.models.user import User
+from application.schemas.message import MessageResponse, MessageCreate
+from application.services.messages import get_messages_from_db, save_message_in_db
 
 router = APIRouter(prefix="/conversation", tags=["messages"])
 

@@ -3,10 +3,10 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
 
-from models.message import Message
-from models.user import User
-from schemas.message import MessageResponse
-from exception.messages import ConversationNotFound
+from application.models.message import Message
+from application.models.user import User
+from application.schemas.message import MessageResponse
+from application.exception.messages import ConversationNotFound
 
 
 async def get_messages_from_db(

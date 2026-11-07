@@ -4,8 +4,8 @@ from datetime import datetime, timezone, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.config import settings
-from dependiences.auth import get_user
+from application.core.config import settings
+from application.dependiences.auth import get_user
 
 password_hash = PasswordHash.recommended()
 DUMMY_HASH = password_hash.hash("dummypassword")

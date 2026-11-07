@@ -3,6 +3,8 @@ services:
     build: .
     env_file: application/.env
     restart: unless-stopped
+    ports:
+      - "3535:3535"
     depends_on:
       postgres:
         condition: service_healthy

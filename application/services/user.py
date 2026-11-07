@@ -2,9 +2,9 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from core.auth import hash_password
-from schemas.user import UserCreate, UserResponse
-from models.user import User
+from application.core.auth import hash_password
+from application.schemas.user import UserCreate, UserResponse
+from application.models.user import User
 
 
 async def create_user(user: UserCreate, session: AsyncSession) -> UserResponse:

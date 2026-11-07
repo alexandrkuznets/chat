@@ -2,11 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import router as chat_router
-from core.config import settings
-from models.db_common import db_common
-from exception.base import BaseAPIException
-from exception.exception_handler import handle_api_exceptions
+from application.api import router as chat_router
+from application.core.config import settings
+from application.models.db_common import db_common
+from application.exception.base import BaseAPIException
+from application.exception.exception_handler import handle_api_exceptions
 
 
 async def lifespan(app: FastAPI):
