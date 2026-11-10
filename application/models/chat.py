@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from application.models.base import Base
@@ -16,6 +16,10 @@ class Chat(Base):
 class ChatParticipant(Base):
     chat_id: Mapped[int] = mapped_column(ForeignKey("chats.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    __table_args__ = (
+        UniqueConstraint("chat_id", "user_id", name="uq_chat_user"),
+    )
 
     participants: Mapped["Chat"] = relationship(back_populates="participants")
     user: Mapped["User"] = relationship(back_populates="chat_participations")
