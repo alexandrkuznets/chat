@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -23,7 +24,9 @@ async def create_user(user: UserCreate, session: AsyncSession) -> UserResponse:
         await session.refresh(user)
         # logger.info(f"Пользователь создан: {user.email}")
         return user
-    except Exception as ex:
-        # logger.error(f"Ошибка создания пользователя! {user.email}. {ex}")
+    except IntegrityError:
         await session.rollback()
-        raise HTTPException(status_code=400, detail=str(ex))
+        raise HTTPException(
+            status_code=409,
+            detail="Пользователь с таким именем уже существует"
+        )

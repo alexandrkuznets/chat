@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime
 from datetime import datetime, timezone
 
@@ -9,3 +9,8 @@ class User(Base):
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    chat_participations: Mapped[list["ChatParticipant"]] = relationship(
+        back_populates="user"
+    )
+    messages: Mapped[list["Message"]] = relationship(back_populates="sender")
