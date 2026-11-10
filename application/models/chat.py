@@ -21,5 +21,5 @@ class ChatParticipant(Base):
         UniqueConstraint("chat_id", "user_id", name="uq_chat_user"),
     )
 
-    participants: Mapped["Chat"] = relationship(back_populates="participants")
-    user: Mapped["User"] = relationship(back_populates="chat_participations")
+    chat: Mapped["Chat"] = relationship(back_populates="participants")
+    user: Mapped["User"] = relationship(back_populates="chat_participant")
