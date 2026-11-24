@@ -1,6 +1,7 @@
 from sqlalchemy import select, func
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
 
 from application.exception.chat import ChatBadRequest
 from application.exception.messages import ConversationNotFound
@@ -47,3 +48,29 @@ async def save_chat_in_db(user_id: int, companion_id:int, session: AsyncSession)
         raise
 
 
+async def get_user_chats(user_id: int, session: AsyncSession):
+    current_user = aliased(ChatParticipant, name="current_user_cp")
+    companion = aliased(ChatParticipant, name="companion_cp")
+
+    user_chats = (
+        select(current_user.chat_id)
+        .where(current_user.user_id == user_id)
+    )
+
+    final_query = (
+        select(companion.chat_id, User.id, User.username)
+        .join_from(User, companion, User.id == companion.user_id)
+        .where(companion.chat_id.in_(user_chats))
+        .where(companion.user_id != user_id)
+    )
+    result = await session.execute(final_query)
+    chats = result.all()
+    chat_result = []
+    for elem in chats:
+        chat_result.append({
+            "chat_id": elem[0],
+            "companion_id": elem[1],
+            "username": elem[2]
+        })
+
+    return chat_result
